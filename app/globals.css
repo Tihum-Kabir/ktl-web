@@ -1,26 +1,582 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --font-sans: var(--font-inter);
 
-@theme inline {
+  /* Shared Theme Keys Mapped to Variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+
+  /* Retain specific accent keys for direct use */
+  --color-accent-blue: #3B82F6;
+  --color-accent-purple: #9333EA;
+  --color-accent-cyan: #22D3EE;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* --- DARK MODE ONLY (Forced Starfall Theme) --- */
+  /* 60% Dominant: Void Navy/Black */
+  --background: #010204;
+  --foreground: #e0faff;
+  /* Light cyan tinted white */
+
+  /* 30% Secondary/Primary Visuals */
+  /* Primary Action (Buttons, Links) */
+  --primary: #22d3ee;
+  /* Cyan */
+  --primary-foreground: #000000;
+
+  /* Secondary Surfaces (Cards, Panels) */
+  --secondary: #8678cf;
+  /* Purple */
+  --secondary-foreground: #ffffff;
+
+  /* 10% Accents (Highlights, "Wow" moments) */
+  --accent: #aa2b67;
+  /* Pink/Magenta */
+  --accent-foreground: #ffffff;
+
+  --tertiary: #aa2b67;
+  /* Pink/Magenta */
+  --tertiary-foreground: #ffffff;
+
+  --radius: 0.5rem;
+}
+
+/* .dark block removed to enforce Obsidian Slate from :root */
+
+/* --- CUSTOM CURSOR SYSTEM --- */
+:root {
+  --laser: #00ff66;
+  /* Green by default */
+  --shadow-deep: #06112E;
+}
+
+body.locked-on {
+  --laser: #ff3131;
+  /* Red on hover */
+  --laser-glow: #ff3131;
+  /* Red glow on hover */
+}
+
+/* --- CURSOR RESET: SYSTEM DEFAULT --- */
+/* Force system cursor everywhere */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+button,
+input,
+textarea,
+select,
+* {
+  cursor: auto !important;
+}
+
+/* --- INFINITE GALLERY: FLOATING WHITE CARDS --- */
+/* --- INFINITE GALLERY: FLOATING WHITE CARDS --- */
+.infinite-gallery-row {
+  background: rgba(255, 255, 255, 0.03) !important;
+  /* Slightly more visible glass */
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+
+  /* Centered Floating Strip Layout */
+  /* "Start from leftest center and travel to rightest center... do not touch the borders" */
+  width: 94%;
+  /* Very wide, but definitely leaves a gap */
+  max-width: 1800px;
+  /* Allows it to stretch nicely on large monitors */
+  margin: 0 auto;
+  /* Perfectly centered */
+  border-radius: 30px;
+  /* Distinct rounded capsule ends */
+
+  /* Premium Glass Effects (Restored & Enhanced) */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  /* Highlight top edge */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  /* "Shadows and glass effect outside the boxes" */
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    /* Deep floating shadow */
+    inset 0 0 50px rgba(255, 255, 255, 0.03);
+  /* Inner glow */
+
+  /* Soft fade on the edges of the content */
+  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.loop-slider .inner {
+  display: flex;
+  width: fit-content;
+  animation: loop var(--duration) linear infinite;
+}
+
+/* THE FLOATING BOXES */
+.partner-box {
+  width: 200px;
+  height: 100px;
+  background: #ffffff;
+  /* Explicit White Box */
+  margin-right: 40px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  /* Strong shadow for "outside the boxes" depth */
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(255, 255, 255, 0.1);
+
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.partner-box:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 30px var(--color-accent-cyan);
+  /* Glow on hover */
+  border-color: var(--color-accent-cyan);
+}
+
+.partner-box img {
+  max-width: 70%;
+  max-height: 70%;
+  /* Original Color Request: No Filters */
+  filter: none;
+  opacity: 1;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.partner-box:hover img {
+  transform: scale(1.1);
+}
+
+/* THE GRADIENT FADES (Adjusted for transparency) */
+/* Fades to transparent (dark bg underlying) or just masks? 
+   Since bg is transparent, we fade to the PARENT background roughly, or use mask-image.
+   mask-image is cleaner for a transparent track. 
+*/
+.infinite-gallery-row {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+/* We can remove the div-based fades if we use mask-image, which is better for "glass" backgrounds. */
+.gallery-fade-left,
+.gallery-fade-right {
+  display: none;
+}
+
+@keyframes loop {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
   }
 }
 
+.metrics-row {
+  color: white;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  margin-top: 50px;
+  font-weight: 600;
+  opacity: 0.9;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+
+/* Explicit Palette Variables - Consolidated above */
+:root {
+  /* Spacing aliases if needed, otherwise rely on Tailwind defaults */
+  --radius: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Helper for borders using new primary */
+  --color-border: #22d3ee33;
+}
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  width: 100%;
+  cursor: none;
+  /* Hide default cursor */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Smooth scrolling */
+/* Fluid Typography & Responsive Resets */
+:root {
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+  --font-size-3xl: clamp(1.875rem, 1.7rem + 0.875vw, 2.25rem);
+  --font-size-4xl: clamp(2.25rem, 2rem + 1.25vw, 3rem);
+  --font-size-5xl: clamp(3rem, 2.75rem + 1.25vw, 3.75rem);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll globally */
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Prevent image/video overflow */
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  /* Removes bottom spacing */
+}
+
+/* Ensure headings wrap and don't overflow */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.1;
+}
+
+p,
+span,
+li {
+  overflow-wrap: break-word;
+}
+
+/* Container safeguard */
+.container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* Custom scrollbar for dark theme */
+@keyframes text-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-text-shimmer {
+  background-size: 200% auto;
+  animation: text-shimmer 5s linear infinite;
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-secondary);
+  border-radius: 5px;
+  border: 2px solid var(--color-background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-secondary), black 20%);
+}
+
+/* Starfall Effect */
+.star-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: transparent;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: flicker var(--d) ease-in-out infinite;
+  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+}
+
+/* Custom Animations for Resources Page */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes bounce-slow {
+
+  0%,
+  100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite;
+}
+
+@keyframes gradient-text {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-text {
+  background-size: 200% auto;
+  animation: gradient-text 4s linear infinite;
 }
