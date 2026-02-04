@@ -95,12 +95,12 @@ interface HeroProps {
 export function Hero({ socialLinks }: HeroProps) {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 transition-colors duration-300">
-            {/* Gradient Orbs - Boosted for "Alive" feel */}
-            <div className="absolute top-0 left-10 w-[600px] h-[600px] bg-secondary/20 dark:bg-secondary/20 rounded-full blur-[140px] animate-pulse"></div>
-            <div className="absolute bottom-0 right-10 w-[600px] h-[600px] bg-primary/20 dark:bg-primary/20 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+            {/* Gradient Orbs - Refined for Eye Comfort */}
+            <div className="absolute top-0 left-10 w-[600px] h-[600px] bg-secondary/15 dark:bg-secondary/15 rounded-full blur-[140px] animate-pulse"></div>
+            <div className="absolute bottom-0 right-10 w-[600px] h-[600px] bg-primary/10 dark:bg-primary/10 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '1s' }}></div>
 
-            {/* Additional Central Glow for Pop */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[160px] pointer-events-none"></div>
+            {/* Dark Anchor Glow - Makes text pop */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[800px] bg-black/60 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
             <div className="relative z-10 max-w-[1400px] mx-auto px-8 text-center">
                 <motion.div
@@ -109,25 +109,25 @@ export function Hero({ socialLinks }: HeroProps) {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="space-y-8"
                 >
-                    {/* Badge */}
+                    {/* Badge - Muted */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-secondary/10 via-secondary/10 to-tertiary/10 border border-secondary/20 backdrop-blur-sm"
+                        className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-sm"
                     >
-                        <Shield className="w-4 h-4 text-secondary" strokeWidth={2.5} />
-                        <span className="text-[13px] font-medium text-secondary tracking-wide">ENTERPRISE INTELLIGENCE SYSTEMS</span>
+                        <Shield className="w-4 h-4 text-secondary/70" strokeWidth={2} />
+                        <span className="text-[13px] font-medium text-secondary/70 tracking-wide">ENTERPRISE INTELLIGENCE SYSTEMS</span>
                     </motion.div>
 
                     {/* Main Headline */}
-                    <div className="mb-6 sm:mb-8 px-2">
+                    <div className="mb-6 sm:mb-8 px-2 relative">
                         <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[7rem] font-bold tracking-tighter leading-tight md:leading-[0.95] break-words text-balance flex flex-col items-center">
-                            <span className="bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] tracking-tight">
+                            <span className="bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(255,255,255,0.15)] tracking-tight">
                                 Global Standard in
                             </span>
-                            <br className="block sm:hidden" /> {/* Force break on mobile, maybe desktop too if requested, but let's stick to user request "response in 3rd line" which implies a break after "in" and "Detection &" */}
-                            <span className="mt-1 md:mt-0 animate-text-shimmer bg-gradient-to-r from-[#0cb9f4] via-[#a452a1] to-[#0cb9f4] bg-clip-text text-transparent drop-shadow-sm dark:drop-shadow-[0_0_80px_rgba(134,120,207,0.3)] block">
+                            <br className="block sm:hidden" />
+                            <span className="mt-1 md:mt-0 animate-text-shimmer bg-gradient-to-r from-[#0cb9f4] via-[#a452a1] to-[#0cb9f4] bg-clip-text text-transparent drop-shadow-sm dark:drop-shadow-[0_0_50px_rgba(134,120,207,0.2)] block">
                                 Detection & <br /> Response
                             </span>
                         </h1>
@@ -138,71 +138,100 @@ export function Hero({ socialLinks }: HeroProps) {
                         Secure your infrastructure with AI-driven surveillance and real-time threat intelligence. Trusted by educational institutions and enterprises worldwide.
                     </p>
 
-                    <div className="flex flex-row flex-wrap items-center justify-center gap-4 pt-4 px-1 w-full">
-                        <Link
-                            href="/contact"
-                            className="w-auto min-w-[140px] sm:min-w-[170px] group relative px-8 h-[50px] sm:h-[60px] flex items-center justify-center bg-gradient-to-r from-[#aa2b67] to-[#a452a1] hover:from-[#a452a1] hover:to-[#aa2b67] text-white text-sm sm:text-lg font-bold rounded-full overflow-hidden hover:scale-105 transition-all duration-300 shadow-[0_10px_20px_-5px_rgba(170,43,103,0.5)] border border-white/10 ring-1 ring-white/20"
+                    <div className="flex flex-row flex-wrap items-center justify-center gap-6 pt-6 px-1 w-full">
+                        {/* Get Started - Liquid Gradient & Scanner Effect */}
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="relative group"
                         >
-                            <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
-                                Get Started <Zap className="w-4 h-4 sm:w-5 sm:h-5 fill-white" />
-                            </span>
-                            {/* Inner Shine Effect */}
-                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
-                            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 blur-md pointer-events-none" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </Link>
+                            <Link
+                                href="/contact"
+                                className="relative w-auto min-w-[160px] sm:min-w-[190px] h-[54px] sm:h-[64px] flex items-center justify-center text-white text-base sm:text-lg font-bold rounded-full shadow-[0_20px_40px_-10px_rgba(170,43,103,0.4)] transition-all duration-500 group-hover:shadow-[0_25px_50px_-12px_rgba(170,43,103,0.6)]"
+                            >
+                                {/* STRICT CLIPPING CONTAINER */}
+                                <div className="absolute inset-0 rounded-full overflow-hidden z-0 pointer-events-none">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#aa2b67] via-[#a452a1] to-[#8678cf]" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                                    <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] group-hover:animate-scan" />
+                                </div>
 
-                        <a
-                            href={socialLinks?.youtube || '#'}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-auto min-w-[140px] sm:min-w-[160px] group flex items-center justify-center gap-2 px-6 h-[50px] sm:h-[64px] bg-[#F2EDE4] text-slate-900 text-sm sm:text-lg font-medium rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_-5px_rgba(255,255,255,0.2)] ring-1 ring-white/50"
+                                <span className="relative z-10 flex items-center gap-2 drop-shadow-sm">
+                                    Get Started <Zap className="w-4 h-4 sm:w-5 sm:h-5 fill-white group-hover:animate-pulse" />
+                                </span>
+
+
+
+
+                            </Link>
+                        </motion.div>
+
+                        {/* Watch Story - Minimal Glass & Pulsing Icon */}
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="relative group"
                         >
-                            <div className="w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                                <div className="w-0 h-0 border-t-[3px] sm:border-t-[5px] border-t-transparent border-l-[5px] sm:border-l-[8px] border-l-white border-b-[3px] sm:border-b-[5px] border-b-transparent ml-0.5" />
-                            </div>
-                            <span className="truncate">Watch Story</span>
-                        </a>
+                            <a
+                                href={socialLinks?.youtube || '#'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-auto min-w-[150px] sm:min-w-[180px] h-[54px] sm:h-[64px] flex items-center justify-center gap-3 px-8 bg-white/[0.03] hover:bg-white/[0.08] text-white/90 hover:text-white text-base sm:text-lg font-medium rounded-full border border-white/10 hover:border-white/20 transition-all duration-500 backdrop-blur-xl shadow-2xl relative overflow-hidden"
+                            >
+                                {/* Animated Background Glow */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-secondary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                <div className="relative z-10 flex items-center gap-3">
+                                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 group-hover:bg-[#ff0055]/20 group-hover:border-[#ff0055]/40 transition-all duration-500">
+                                        <div className="w-0 h-0 border-t-[4px] sm:border-t-[6px] border-t-transparent border-l-[7px] sm:border-l-[10px] border-l-white border-b-[4px] sm:border-b-[6px] border-b-transparent ml-1 group-hover:scale-110 transition-transform" />
+                                    </div>
+                                    <span className="tracking-tight">Watch Story</span>
+                                </div>
+
+                                {/* Pulse Effect */}
+                                <div className="absolute top-1/2 left-8 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 animate-ping opacity-0 group-hover:opacity-30 pointer-events-none" />
+                            </a>
+                        </motion.div>
                     </div>
-
-                    {/* Partner Logos */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.6 }}
-                        className="pt-6"
-                    >
-                        <InfiniteLogoScrollInline />
-                    </motion.div>
 
                     {/* Stats */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.6, duration: 0.6 }}
-                        className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pt-6 sm:pt-12 max-w-[800px] mx-auto px-4"
+                        transition={{ delay: 0.5, duration: 0.6 }}
+                        className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pt-8 sm:pt-16 max-w-[800px] mx-auto px-4"
                     >
                         <div className="space-y-2 sm:space-y-3">
                             <div className="flex items-center justify-center gap-2.5">
                                 <Zap className="w-5 h-5 text-violet-600 dark:text-violet-400" strokeWidth={2.5} />
                                 <div className="text-4xl sm:text-[42px] font-bold text-gray-900 dark:text-white leading-none">&lt;2s</div>
                             </div>
-                            <div className="text-[11px] sm:text-[13px] font-medium text-gray-500 uppercase tracking-wider">Alert Response Time</div>
+                            <div className="text-[11px] sm:text-[13px] font-medium text-gray-500 uppercase tracking-wider text-center">Alert Response Time</div>
                         </div>
                         <div className="space-y-2 sm:space-y-3">
                             <div className="flex items-center justify-center gap-2.5">
                                 <Eye className="w-5 h-5 text-cyan-600 dark:text-cyan-400" strokeWidth={2.5} />
                                 <div className="text-4xl sm:text-[42px] font-bold text-gray-900 dark:text-white leading-none">24/7</div>
                             </div>
-                            <div className="text-[11px] sm:text-[13px] font-medium text-gray-500 uppercase tracking-wider">Continuous Monitoring</div>
+                            <div className="text-[11px] sm:text-[13px] font-medium text-gray-500 uppercase tracking-wider text-center">Continuous Monitoring</div>
                         </div>
                         <div className="space-y-2 sm:space-y-3">
                             <div className="flex items-center justify-center gap-2.5">
                                 <Shield className="w-5 h-5 text-purple-600 dark:text-purple-400" strokeWidth={2.5} />
                                 <div className="text-4xl sm:text-[42px] font-bold text-gray-900 dark:text-white leading-none">99.9%</div>
                             </div>
-                            <div className="text-[11px] sm:text-[13px] font-medium text-gray-500 uppercase tracking-wider">System Uptime</div>
+                            <div className="text-[11px] sm:text-[13px] font-medium text-gray-500 uppercase tracking-wider text-center">System Uptime</div>
                         </div>
+                    </motion.div>
+
+                    {/* Partner Logos */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6, duration: 0.6 }}
+                        className="pt-12 sm:pt-16"
+                    >
+                        <InfiniteLogoScrollInline />
                     </motion.div>
                 </motion.div>
             </div>

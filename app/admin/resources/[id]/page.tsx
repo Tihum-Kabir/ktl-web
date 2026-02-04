@@ -1,19 +1,24 @@
+import { getResourceById } from '@/app/actions/resources';
 import ResourceEditorForm from '@/components/admin/ResourceEditorForm';
-import { getResourceBySlug, getResources } from '@/app/actions/resources';
-import { createClient } from '@/lib/supabase/server';
+import { notFound } from 'next/navigation';
 
-export default async function EditResourcePage(props: { params: Promise<{ id: string }> }) {
-    const params = await props.params;
-    const supabase = await createClient();
-    const { data: resource } = await supabase
-        .from('resources')
-        .select('*')
-        .eq('id', params.id)
-        .single();
+interface PageProps {
+    params: Promise<{
+        id: string;
+    }>;
+}
+
+export default async function EditResourcePage({ params }: PageProps) {
+    const { id } = await params;
+    const resource = await getResourceById(id);
 
     if (!resource) {
-        return <div>Resource not found</div>;
+        notFound();
     }
 
-    return <ResourceEditorForm initialResource={resource} />;
+    return (
+        <div className="p-8">
+            <ResourceEditorForm initialResource={resource} />
+        </div>
+    );
 }

@@ -51,7 +51,7 @@ export function ServiceActions({ service }: { service: Service }) {
                 className="p-2 hover:bg-white/10 rounded-lg transition-colors group"
                 title="Edit service"
             >
-                <Edit className="w-4 h-4 text-gray-400 group-hover:text-violet-400 transition-colors" />
+                <Edit className="w-4 h-4 text-gray-200 group-hover:text-violet-400 transition-colors" />
             </Link>
 
             {/* Publish/Unpublish Button */}
@@ -62,9 +62,9 @@ export function ServiceActions({ service }: { service: Service }) {
                 title={service.is_published ? 'Unpublish' : 'Publish'}
             >
                 {service.is_published ? (
-                    <EyeOff className="w-4 h-4 text-gray-400 group-hover:text-amber-400 transition-colors" />
+                    <EyeOff className="w-4 h-4 text-gray-200 group-hover:text-amber-400 transition-colors" />
                 ) : (
-                    <Eye className="w-4 h-4 text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                    <Eye className="w-4 h-4 text-gray-200 group-hover:text-emerald-400 transition-colors" />
                 )}
             </button>
 
@@ -75,7 +75,7 @@ export function ServiceActions({ service }: { service: Service }) {
                 className="p-2 hover:bg-white/10 rounded-lg transition-colors group disabled:opacity-50"
                 title="Delete service"
             >
-                <Trash2 className="w-4 h-4 text-gray-400 group-hover:text-red-400 transition-colors" />
+                <Trash2 className="w-4 h-4 text-gray-200 group-hover:text-red-400 transition-colors" />
             </button>
         </div>
     );

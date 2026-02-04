@@ -1,5 +1,9 @@
 import ResourceEditorForm from '@/components/admin/ResourceEditorForm';
 
 export default function NewResourcePage() {
-    return <ResourceEditorForm />;
+    return (
+        <div className="p-8">
+            <ResourceEditorForm initialResource={null} />
+        </div>
+    );
 }

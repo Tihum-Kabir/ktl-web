@@ -31,10 +31,11 @@ export default function DeleteButton({ id, onDelete, confirmMessage = 'Are you s
         <button
             onClick={handleDelete}
             disabled={isPending}
-            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+            className="flex items-center gap-1 p-2 text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50 text-xs font-medium"
             title="Delete"
         >
             {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+            <span>Delete</span>
         </button>
     );
 }

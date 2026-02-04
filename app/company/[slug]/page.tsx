@@ -1,5 +1,12 @@
 import Link from 'next/link';
 
+const titles: Record<string, string> = {
+    'about': 'About Us',
+    'team': 'Our Team',
+    'careers': 'Careers',
+    'contact': 'Contact Us'
+};
+
 export default async function CompanyPage({
     params
 }: {

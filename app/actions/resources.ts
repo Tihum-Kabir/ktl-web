@@ -61,6 +61,19 @@ export async function getResourceBySlug(slug: string) {
         .maybeSingle();
 
     if (error) console.error('Error fetching resource details:', error);
+    if (error) console.error('Error fetching resource details:', error);
+    return data as Resource | null;
+}
+
+export async function getResourceById(id: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('resources')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) console.error('Error fetching resource by id:', error);
     return data as Resource | null;
 }
 

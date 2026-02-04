@@ -188,7 +188,7 @@ export default function StarfallBackground() {
             {/* Background Gradient Layer: #0a0e18 to #030305 */}
             <div
                 className="absolute inset-0 w-full h-full"
-                style={{ background: 'radial-gradient(circle at center, #030610 0%, #010204 100%)' }}
+                style={{ background: 'radial-gradient(circle at center, #0a1b28 0%, #010409 100%)' }}
             />
 
             {/* Canvas for Particles with Filter */}

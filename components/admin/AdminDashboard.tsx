@@ -87,8 +87,8 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                                 key={item.id}
                                 onClick={() => setActiveTab(item.id)}
                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activeTab === item.id
-                                        ? 'bg-violet-600 text-white'
-                                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                                    ? 'bg-violet-600 text-white'
+                                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
                                     }`}
                             >
                                 <Icon className="w-5 h-5" />
@@ -248,7 +248,7 @@ function StatCard({ title, value, icon: Icon, color }: any) {
     return (
         <div className="bg-zinc-950 border border-white/10 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 bg-gradient-to-br ${colors[color]} rounded-lg flex items-center justify-center`}>
+                <div className={`w-12 h-12 bg-gradient-to-br ${colors[color as keyof typeof colors]} rounded-lg flex items-center justify-center`}>
                     <Icon className="w-6 h-6 text-white" />
                 </div>
             </div>

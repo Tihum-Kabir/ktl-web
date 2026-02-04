@@ -3,173 +3,131 @@
 import { useEffect, useRef } from 'react';
 
 export default function LaserCursor() {
-    // We don't strictly need refs to DOM elements if we use document.getElementById 
-    // like the snippet, but React refs are cleaner. 
-    // However, since the user's CSS targets IDs, we will strictly follow their IDs.
-
-    const requestRef = useRef<number>(0);
-    const mouse = useRef({ x: 0, y: 0 });
-    const ringPos = useRef({ x: 0, y: 0 });
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        const dot = document.getElementById('cursor-dot');
-        const ring = document.getElementById('cursor-ring');
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-        if (!dot || !ring) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-        // Track mouse movement
-        const handleMouseMove = (e: MouseEvent) => {
-            mouse.current.x = e.clientX;
-            mouse.current.y = e.clientY;
+        // Configuration
+        const amount = 12; // Shorter trail (was 20)
+        const width = 1;
+        const idleTimeout = 150;
+        const colors = ['#22D3EE', '#0066ff']; // Cyan (#22D3EE) to Deep Blue
+
+        let mouse = { x: 0, y: 0 };
+        let lastMove = 0;
+        let dots: Dot[] = [];
+        let animationFrameId: number;
+
+        // --- Dot Class Adaptation ---
+        class Dot {
+            x: number;
+            y: number;
+            index: number;
+
+            constructor(index: number) {
+                this.x = 0;
+                this.y = 0;
+                this.index = index;
+            }
+
+            draw(nextDot: { x: number; y: number }) {
+                // Smooth movement logic (Follow the leader)
+                this.x += (nextDot.x - this.x) * 0.4; // Slightly faster follow for snappy feel
+                this.y += (nextDot.y - this.y) * 0.4;
+
+                ctx!.beginPath();
+                ctx!.strokeStyle = colors[0];
+
+                // Thinner tapered end
+                // max width was ~10. Now (12 * 0.3) = 3.6px max width.
+                ctx!.lineWidth = (amount - this.index) * 0.3;
+                ctx!.lineCap = 'round';
+
+                ctx!.moveTo(this.x, this.y);
+                ctx!.lineTo(nextDot.x, nextDot.y);
+                ctx!.stroke();
+            }
+        }
+
+        // Initialize Canvas
+        function initCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas!.width = window.innerWidth * dpr;
+            canvas!.height = window.innerHeight * dpr;
+            ctx!.scale(dpr, dpr);
+            canvas!.style.width = window.innerWidth + 'px';
+            canvas!.style.height = window.innerHeight + 'px';
+        }
+
+        // Initialize Dots
+        function initDots() {
+            dots = [];
+            for (let i = 0; i < amount; i++) {
+                dots.push(new Dot(i));
+            }
+        }
+
+        const onMouseMove = (e: MouseEvent) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            lastMove = Date.now();
         };
 
-        // The Animation Loop
-        const animate = () => {
-            // 1. Move the Dot (Instant - No Lag)
-            // We use the ref values directly
-            dot.style.transform = `translate3d(${mouse.current.x}px, ${mouse.current.y}px, 0) translate(-50%, -50%)`;
+        const onResize = () => initCanvas();
 
-            // 2. Move the Ring (Lerp - Weighted Lag)
-            // The 0.15 factor determines the "weight" of the scope.
-            ringPos.current.x += (mouse.current.x - ringPos.current.x) * 0.15;
-            ringPos.current.y += (mouse.current.y - ringPos.current.y) * 0.15;
+        function render() {
+            if (!ctx || !canvas) return;
 
-            ring.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%)`;
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-            requestRef.current = requestAnimationFrame(animate);
-        };
+            // Fade out effect when idle
+            if (Date.now() - lastMove < idleTimeout) {
+                ctx.globalAlpha = 1;
+            } else {
+                ctx.globalAlpha *= 0.9;
+                if (ctx.globalAlpha < 0.01) ctx.globalAlpha = 0;
+            }
 
-        document.addEventListener('mousemove', handleMouseMove);
-        requestRef.current = requestAnimationFrame(animate);
+            if (ctx.globalAlpha > 0) {
+                let nextDot = { x: mouse.x, y: mouse.y };
+                dots.forEach(dot => {
+                    dot.draw(nextDot);
+                    nextDot = dot;
+                });
+            }
+
+            animationFrameId = requestAnimationFrame(render);
+        }
+
+        window.addEventListener('resize', onResize);
+        window.addEventListener('mousemove', onMouseMove);
+
+        initCanvas();
+        initDots();
+        render();
 
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            if (requestRef.current) cancelAnimationFrame(requestRef.current);
-        };
-    }, []);
-
-    // Universal Hover Detection
-    useEffect(() => {
-        const isClickable = (element: Element): boolean => {
-            // 1. Check for obvious tags
-            const clickableTags = ['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'LABEL'];
-            if (clickableTags.includes(element.tagName)) return true;
-
-            // 2. Check if it's inside a clickable parent
-            if (element.closest('a, button, label')) return true;
-
-            // 3. Check computed style for 'cursor: pointer'
-            // This is expensive to do on every mouseover, but requested by user.
-            // We can optimize slightly by checking if it's an HTMLElement.
-            if (element instanceof HTMLElement) {
-                const style = window.getComputedStyle(element);
-                return style.cursor === 'pointer';
-            }
-            return false;
-        };
-
-        const handleMouseOver = (e: MouseEvent) => {
-            if (e.target instanceof Element && isClickable(e.target)) {
-                document.body.classList.add('locked-on');
-            }
-        };
-
-        const handleMouseOut = () => {
-            document.body.classList.remove('locked-on');
-        };
-
-        document.addEventListener('mouseover', handleMouseOver);
-        document.addEventListener('mouseout', handleMouseOut);
-
-        return () => {
-            document.removeEventListener('mouseover', handleMouseOver);
-            document.removeEventListener('mouseout', handleMouseOut);
-            // Ensure cleanup
-            document.body.classList.remove('locked-on');
+            window.removeEventListener('resize', onResize);
+            window.removeEventListener('mousemove', onMouseMove);
+            cancelAnimationFrame(animationFrameId);
         };
     }, []);
 
     return (
-        <>
-            <style jsx global>{`
-        /* Base settings for both parts */
-        #cursor-dot, #cursor-ring {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none; /* Crucial: lets you click through them */
-        }
-
-        /* 1. The Sniper Center (Plus Button) */
-        #cursor-dot {
-            width: 6px;
-            height: 6px;
-            background-color: transparent;
-            /* Center the plus manually */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Only transition colors/size, NOT transform to avoid lag */
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        
-        /* Plus vertical line */
-        #cursor-dot::before {
-            content: '';
-            position: absolute;
-            width: 1px;
-            height: 100%;
-            background-color: #00ff00;
-            box-shadow: 0 0 6px #00ff00;
-        }
-
-        /* Plus horizontal line */
-        #cursor-dot::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background-color: #00ff00;
-            box-shadow: 0 0 6px #00ff00;
-        }
-
-        /* 2. The Scope (Outer Ring) */
-        #cursor-ring {
-            width: 30px; /* Smaller scope */
-            height: 30px;
-            border: 1.5px solid rgba(0, 255, 0, 0.6); /* Thinner border */
-            background: rgba(0, 255, 0, 0.03); /* Faint green fill for tracking */
-            /* Add inset shadow as requested + soft outer glow */
-            box-shadow: 0 0 8px rgba(0, 255, 0, 0.2), inset 0 0 10px rgba(0, 255, 0, 0.1); 
-            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
-
-        /* --- LOCKED ON STATE (Red) --- */
-        body.locked-on #cursor-dot::before,
-        body.locked-on #cursor-dot::after {
-            background-color: #ff0000; /* Kill Red */
-            box-shadow: 0 0 15px #ff0000;
-        }
-
-        body.locked-on #cursor-ring {
-            border-color: #ff0000;
-            width: 16px; /* Ring snaps tight */
-            height: 16px;
-            background-color: rgba(255, 0, 0, 0.2); /* Stronger red fill */
-            box-shadow: 0 0 15px #ff0000; /* Red outer glow */
-            border-width: 2px;
-        }
-
-        /* Hide default cursor globally */
-        body, a, button, input, textarea, label {
-            cursor: none !important;
-        }
-      `}</style>
-            <div id="cursor-dot"></div>
-            <div id="cursor-ring"></div>
-        </>
+        <canvas
+            ref={canvasRef}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                pointerEvents: 'none',
+                zIndex: 9999999,
+            }}
+        />
     );
 }

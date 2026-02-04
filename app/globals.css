@@ -22,141 +22,42 @@
 }
 
 :root {
-  /* --- DARK MODE ONLY (Forced Starfall Theme) --- */
-  /* 60% Dominant: Void Navy/Black */
-  --background: #010204;
+  /* Dominant: Stygian Deep Black */
+  --background: #010409;
   --foreground: #e0faff;
-  /* Light cyan tinted white */
 
-  /* 30% Secondary/Primary Visuals */
-  /* Primary Action (Buttons, Links) */
+  /* Primary Action: Neon Cyan */
   --primary: #22d3ee;
-  /* Cyan */
   --primary-foreground: #000000;
 
-  /* Secondary Surfaces (Cards, Panels) */
+  /* Secondary: High-Contrast Purple */
   --secondary: #8678cf;
-  /* Purple */
   --secondary-foreground: #ffffff;
 
-  /* 10% Accents (Highlights, "Wow" moments) */
+  /* Accent: Hot Pink/Magenta */
   --accent: #aa2b67;
-  /* Pink/Magenta */
   --accent-foreground: #ffffff;
 
   --tertiary: #aa2b67;
-  /* Pink/Magenta */
   --tertiary-foreground: #ffffff;
 
   --radius: 0.5rem;
 }
 
-/* .dark block removed to enforce Obsidian Slate from :root */
-
-/* --- CUSTOM CURSOR SYSTEM --- */
+/* --- SNIPER CURSOR VARIABLES --- */
 :root {
   --laser: #00ff66;
-  /* Green by default */
   --shadow-deep: #06112E;
 }
 
 body.locked-on {
   --laser: #ff3131;
-  /* Red on hover */
-  --laser-glow: #ff3131;
-  /* Red glow on hover */
 }
 
-/* --- CURSOR RESET: SYSTEM DEFAULT --- */
-/* Force system cursor everywhere */
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video,
-button,
-input,
-textarea,
-select,
-* {
-  cursor: auto !important;
-}
+/* .dark block removed to enforce Obsidian Slate from :root */
+
+/* --- CURSOR SYSTEM: HANDLED BY LaserCursor.tsx --- */
+/* System cursor restored */
 
 /* --- INFINITE GALLERY: FLOATING WHITE CARDS --- */
 /* --- INFINITE GALLERY: FLOATING WHITE CARDS --- */
@@ -209,7 +110,7 @@ select,
   width: 200px;
   height: 100px;
   background: #ffffff;
-  /* Explicit White Box */
+  /* Restored for logo readability */
   margin-right: 40px;
   border-radius: 16px;
   display: flex;
@@ -217,7 +118,7 @@ select,
   justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.5);
 
-  /* Strong shadow for "outside the boxes" depth */
+  /* Strong shadow for depth */
   box-shadow:
     0 15px 35px rgba(0, 0, 0, 0.2),
     0 0 20px rgba(255, 255, 255, 0.1);
@@ -230,14 +131,12 @@ select,
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.3),
     0 0 30px var(--color-accent-cyan);
-  /* Glow on hover */
   border-color: var(--color-accent-cyan);
 }
 
 .partner-box img {
   max-width: 70%;
   max-height: 70%;
-  /* Original Color Request: No Filters */
   filter: none;
   opacity: 1;
   object-fit: contain;
@@ -264,6 +163,16 @@ select,
   display: none;
 }
 
+@keyframes scan {
+  from {
+    left: -100%;
+  }
+
+  to {
+    left: 200%;
+  }
+}
+
 @keyframes loop {
   0% {
     transform: translateX(0);
@@ -275,14 +184,14 @@ select,
 }
 
 .metrics-row {
-  color: white;
+  color: rgba(255, 255, 255, 0.85);
   display: flex;
   gap: 40px;
   justify-content: center;
   margin-top: 50px;
   font-weight: 600;
   opacity: 0.9;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
 }
 
 
@@ -315,8 +224,7 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   width: 100%;
-  cursor: none;
-  /* Hide default cursor */
+  /* cursor: none; removed */
 }
 
 h1,

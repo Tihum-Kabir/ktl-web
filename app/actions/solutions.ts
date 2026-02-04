@@ -73,6 +73,19 @@ export async function getSolutionBySlug(slug: string) {
         .maybeSingle();
 
     if (error) console.error('Error fetching solution by slug:', JSON.stringify(error, null, 2));
+    if (error) console.error('Error fetching solution by slug:', JSON.stringify(error, null, 2));
+    return data as Solution | null;
+}
+
+export async function getSolutionById(id: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('solutions')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) console.error('Error fetching solution by id:', error);
     return data as Solution | null;
 }
 

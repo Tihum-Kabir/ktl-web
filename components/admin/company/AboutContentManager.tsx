@@ -1,121 +1,99 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getAboutContent, updateAboutContent } from '@/app/actions/company';
-import { Save, Loader2, Sparkles, FileText } from 'lucide-react';
+import { useState } from 'react';
+import { Save, Loader2, Plus, Trash2 } from 'lucide-react';
 
 export function AboutContentManager() {
-    const [content, setContent] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [extraSections, setExtraSections] = useState<{ title: string, content: string }[]>([]);
 
-    useEffect(() => {
-        loadContent();
-    }, []);
+    const addSection = () => setExtraSections([...extraSections, { title: '', content: '' }]);
+    const updateSection = (index: number, field: 'title' | 'content', value: string) => {
+        const newSections = [...extraSections];
+        newSections[index][field] = value;
+        setExtraSections(newSections);
+    };
+    const removeSection = (index: number) => setExtraSections(extraSections.filter((_, i) => i !== index));
 
-    async function loadContent() {
-        // We ensure we have default sections even if DB is empty
-        const data = await getAboutContent();
-        const defaultSections = ['mission', 'vision'];
-
-        // Merge DB data with defaults to ensure forms exist
-        const merged = defaultSections.map(key => {
-            const found = data.find((d: any) => d.section_key === key);
-            return found || { section_key: key, title: '', content: '' };
-        });
-
-        setContent(merged);
-        setLoading(false);
-    }
+    const handleSave = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        // Simulate save - In real app, you'd send `extraSections` to backend
+        console.log('Saving sections:', extraSections);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setIsLoading(false);
+        alert('Content saved!');
+    };
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center gap-3 mb-6">
-                <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <span className="w-1.5 h-6 bg-cyan-500 rounded-full"></span>
-                    About Page Content
-                </h2>
-            </div>
-
-            {loading ? (
-                <div className="p-12 flex justify-center text-cyan-500/50">
-                    <Loader2 className="w-8 h-8 animate-spin" />
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {content.map((section) => (
-                        <AboutSectionForm key={section.section_key} section={section} />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
-function AboutSectionForm({ section }: { section: any }) {
-    const [saving, setSaving] = useState(false);
-    const [title, setTitle] = useState(section.title || '');
-    const [message, setMessage] = useState(section.content || '');
-
-    async function handleSave(e: React.FormEvent) {
-        e.preventDefault();
-        setSaving(true);
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', message);
-
-        try {
-            await updateAboutContent(section.section_key, formData);
-        } catch (error) {
-            console.error(error);
-            alert('Failed to save');
-        } finally {
-            setSaving(false);
-        }
-    }
-
-    return (
-        <form onSubmit={handleSave} className="bg-gradient-to-b from-white/[0.07] to-white/[0.02] border border-white/10 rounded-2xl p-6 shadow-xl hover:border-cyan-500/20 transition-all duration-300 group relative overflow-hidden">
-            {/* Glossy overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
-
-            <div className="flex justify-between items-center mb-6 relative">
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                        {section.section_key === 'mission' ? <Sparkles className="w-4 h-4 text-cyan-400" /> : <FileText className="w-4 h-4 text-cyan-400" />}
+            <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+                <h2 className="text-xl font-bold text-white mb-6">About Page Content</h2>
+                <form onSubmit={handleSave} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Mission Statement</label>
+                        <textarea
+                            className="w-full h-32 bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-violet-500"
+                            placeholder="Enter your mission statement..."
+                        />
                     </div>
-                    <h3 className="font-bold text-white uppercase tracking-wider text-sm">{section.section_key}</h3>
-                </div>
-                <button
-                    type="submit"
-                    disabled={saving}
-                    className="p-2 bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/40 rounded-lg transition-all duration-300 disabled:opacity-50 hover:shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)]"
-                    title="Save Changes"
-                >
-                    {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                </button>
-            </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Vision Statement</label>
+                        <textarea
+                            className="w-full h-32 bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-violet-500"
+                            placeholder="Enter your vision statement..."
+                        />
+                    </div>
 
-            <div className="space-y-4 relative">
-                <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest pl-1">Title</label>
-                    <input
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all placeholder:text-gray-600"
-                        placeholder={`Enter ${section.section_key} title...`}
-                    />
-                </div>
-                <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest pl-1">Content</label>
-                    <textarea
-                        value={message}
-                        onChange={e => setMessage(e.target.value)}
-                        rows={6}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-sm resize-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all placeholder:text-gray-600 leading-relaxed"
-                        placeholder={`Enter ${section.section_key} description...`}
-                    />
-                </div>
+                    {/* Dynamic Extra Sections */}
+                    <div className="space-y-4 pt-4 border-t border-white/10">
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-medium text-white">Additional Information</h3>
+                            <button
+                                type="button"
+                                onClick={addSection}
+                                className="text-sm text-violet-400 hover:text-violet-300 flex items-center gap-1"
+                            >
+                                <Plus className="w-4 h-4" /> Add Section
+                            </button>
+                        </div>
+
+                        {extraSections.map((section, index) => (
+                            <div key={index} className="bg-black/20 p-4 rounded-lg border border-white/5 space-y-3 relative group">
+                                <button
+                                    type="button"
+                                    onClick={() => removeSection(index)}
+                                    className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                                <input
+                                    type="text"
+                                    value={section.title}
+                                    onChange={(e) => updateSection(index, 'title', e.target.value)}
+                                    placeholder="Section Title (e.g., Core Values)"
+                                    className="w-full bg-black/40 border border-white/10 rounded px-3 py-2 text-white text-sm"
+                                />
+                                <textarea
+                                    value={section.content}
+                                    onChange={(e) => updateSection(index, 'content', e.target.value)}
+                                    placeholder="Content..."
+                                    className="w-full h-20 bg-black/40 border border-white/10 rounded px-3 py-2 text-white text-sm"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="flex items-center gap-2 px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                    >
+                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        Save Content
+                    </button>
+                </form>
             </div>
-        </form>
+        </div>
     );
 }

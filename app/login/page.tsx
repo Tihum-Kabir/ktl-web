@@ -21,7 +21,7 @@ export default function LoginPage() {
         if (result?.error) {
             setError(result.error);
             setLoading(false);
-        } else if (result?.requiresVerification) {
+        } else if (result && 'requiresVerification' in result && result.requiresVerification) {
             // Show verification message
             setVerificationSent(true);
             setVerificationEmail(result.email || '');

@@ -41,12 +41,22 @@ export default async function ResourceDetailPage(props: { params: Promise<{ slug
         // If user lands here, we show a button.
     }
 
-    const contentBlocks = resource.content || [];
+    // Pre-process content blocks to handle async markdown parsing
+    const processedBlocks = await Promise.all((resource.content || []).map(async (block: any) => {
+        if (block.type === 'text') {
+            return {
+                ...block,
+                htmlContent: await marked(block.content || '')
+            };
+        }
+        return block;
+    }));
 
     return (
         <article className="min-h-screen bg-black text-white selection:bg-violet-500/30 pt-32 pb-20">
-            {/* Header / Hero */}
+            {/* ... Header ... */}
             <div className="max-w-4xl mx-auto px-8 mb-16">
+                {/* (Header content omitted for brevity, keeping structure) */}
                 <Link
                     href="/resources"
                     className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-8 group"
@@ -83,7 +93,7 @@ export default async function ResourceDetailPage(props: { params: Promise<{ slug
                         )}
                         <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
-                            {Math.max(1, Math.ceil(contentBlocks.length / 2))} min read
+                            {Math.max(1, Math.ceil((resource.content || []).length / 2))} min read
                         </div>
                     </div>
                 </div>
@@ -107,15 +117,14 @@ export default async function ResourceDetailPage(props: { params: Promise<{ slug
 
             {/* Content Blocks */}
             <div className="max-w-3xl mx-auto px-8 space-y-12">
-                {contentBlocks.map((block: any, index: number) => {
+                {processedBlocks.map((block: any, index: number) => {
                     switch (block.type) {
                         case 'text':
-                            const htmlContent = marked(block.content || '');
                             return (
                                 <div
                                     key={block.id}
                                     className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-violet-400 prose-img:rounded-xl"
-                                    dangerouslySetInnerHTML={{ __html: htmlContent }}
+                                    dangerouslySetInnerHTML={{ __html: block.htmlContent }}
                                 />
                             );
 

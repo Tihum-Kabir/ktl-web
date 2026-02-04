@@ -4,23 +4,41 @@ import { useState } from 'react';
 import SettingsForm from '@/app/admin/settings/SettingsForm';
 import { TeamManager } from '@/components/admin/company/TeamManager';
 import { AboutContentManager } from '@/components/admin/company/AboutContentManager';
-import { FAQManager } from '@/components/admin/company/FAQManager'; // Import FAQManager
-import { Building2, Users, FileText, HelpCircle, LayoutTemplate } from 'lucide-react';
+import { HomepageManager } from '@/components/admin/company/HomepageManager';
+import { FAQManager } from '@/components/admin/company/FAQManager';
+import { ServicesManager } from '@/components/admin/company/ServicesManager';
+import { SolutionsManager } from '@/components/admin/company/SolutionsManager';
+import { ResourcesManager } from '@/components/admin/company/ResourcesManager';
+import { Building2, Users, FileText, HelpCircle, LayoutTemplate, Briefcase, Database, Library } from 'lucide-react';
 
 interface SettingsTabsProps {
     initialLogo: any;
     initialSocialLinks: any;
     initialContactInfo: any;
+    initialServices: any[];
+    initialSolutions: any[];
+    initialResources: any[];
 }
 
-export default function SettingsTabs({ initialLogo, initialSocialLinks, initialContactInfo }: SettingsTabsProps) {
+export default function SettingsTabs({
+    initialLogo,
+    initialSocialLinks,
+    initialContactInfo,
+    initialServices,
+    initialSolutions,
+    initialResources
+}: SettingsTabsProps) {
     const [activeTab, setActiveTab] = useState('general');
 
     const tabs = [
         { id: 'general', label: 'General & Brand', icon: Building2 },
-        { id: 'team', label: 'Team Members', icon: Users },
-        { id: 'about', label: 'About Content', icon: FileText },
-        { id: 'faqs', label: 'FAQs', icon: HelpCircle }, // Add FAQs Tab
+        { id: 'homepage', label: 'Homepage Content', icon: LayoutTemplate },
+        { id: 'services', label: 'Services', icon: Briefcase },
+        { id: 'solutions', label: 'Solutions', icon: Database },
+        { id: 'resources', label: 'Resources', icon: Library },
+        { id: 'team', label: 'Team', icon: Users },
+        { id: 'about', label: 'About', icon: FileText },
+        { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     ];
 
     return (
@@ -44,13 +62,6 @@ export default function SettingsTabs({ initialLogo, initialSocialLinks, initialC
                         </button>
                     );
                 })}
-                <a
-                    href="/admin/settings/homepage"
-                    className="flex items-center gap-2 px-4 py-2 rounded-t-lg text-gray-400 hover:text-white hover:bg-white/5 ml-auto text-sm transition-colors"
-                >
-                    <LayoutTemplate className="w-4 h-4" />
-                    <span>Homepage Content &rarr;</span>
-                </a>
             </div>
 
             {/* Tab Content */}
@@ -64,6 +75,26 @@ export default function SettingsTabs({ initialLogo, initialSocialLinks, initialC
                                 initialContactInfo={initialContactInfo}
                             />
                         </div>
+                    </div>
+                )}
+                {activeTab === 'homepage' && (
+                    <div className="animate-in fade-in duration-300 slide-in-from-bottom-2">
+                        <HomepageManager />
+                    </div>
+                )}
+                {activeTab === 'services' && (
+                    <div className="animate-in fade-in duration-300 slide-in-from-bottom-2">
+                        <ServicesManager initialServices={initialServices} />
+                    </div>
+                )}
+                {activeTab === 'solutions' && (
+                    <div className="animate-in fade-in duration-300 slide-in-from-bottom-2">
+                        <SolutionsManager initialSolutions={initialSolutions} />
+                    </div>
+                )}
+                {activeTab === 'resources' && (
+                    <div className="animate-in fade-in duration-300 slide-in-from-bottom-2">
+                        <ResourcesManager initialResources={initialResources} />
                     </div>
                 )}
                 {activeTab === 'team' && (
